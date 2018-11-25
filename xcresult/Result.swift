@@ -9,6 +9,7 @@
 import Foundation
 
 struct Result: Codable {
+    
     let TestableSummaries: [TestableSummary]
     
     struct TestableSummary: Codable {
