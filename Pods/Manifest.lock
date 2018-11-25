@@ -1,0 +1,16 @@
+PODS:
+  - XMLCoder (0.1.0)
+
+DEPENDENCIES:
+  - XMLCoder
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - XMLCoder
+
+SPEC CHECKSUMS:
+  XMLCoder: af0b69d184654d8f58a4bc4168d20ee95b7e8203
+
+PODFILE CHECKSUM: de9f740aba24526da363140de2c2d22c926aad32
+
+COCOAPODS: 1.6.0.beta.1
