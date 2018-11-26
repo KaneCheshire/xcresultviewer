@@ -141,7 +141,7 @@ struct ResultHandler {
                     max-width:640pt;
                 }
                 img.screenshot {
-                    border-radius:5pt;
+                    border-radius:20pt;
                 }
             </style>
         </head>
@@ -159,8 +159,7 @@ struct ResultHandler {
     }
     
     private func ignoredActivityContents() -> [String] {
-        return ["snapshot accessibility hierarchy",
-                "to idle"]
+        return ["snapshot accessibility hierarchy"]
     }
     
 }
