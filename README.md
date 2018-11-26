@@ -9,8 +9,7 @@ When UI tests randomly fail on CI it can be really hard to trace back what happe
 
 ## Usage
 
-- Download, fork or clone the repo
-- Compile and export the command line utility
+- Download the [latest release](https://github.com/KaneCheshire/xcresultviewer/releases/latest)
 - In Terminal, navigate to where the utility is located
 - Run `./xcresultviewer '<path to an .xcresult bundle (usually located in derived data)>'`
 
