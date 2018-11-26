@@ -13,6 +13,8 @@ When UI tests randomly fail on CI it can be really hard to trace back what happe
 - In Terminal, navigate to where the utility is located
 - Run `./xcresultviewer '<path to an .xcresult bundle (usually located in derived data)>'`
 
+Watch out for spaces in the path name.
+
 `xcresultviewer` only shows tests that failed and matches up automatic screenshots with activities so you can follow the flow.
 
 ## Suggestions?
