@@ -160,8 +160,7 @@ struct ResultHandler {
     
     private func ignoredActivityContents() -> [String] {
         return ["snapshot accessibility hierarchy",
-                "to idle",
-                "synthesize event"]
+                "to idle"]
     }
     
 }
