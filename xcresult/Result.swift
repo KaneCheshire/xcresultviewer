@@ -9,55 +9,106 @@
 import Foundation
 
 struct Result: Codable {
+    let testableSummaries: [TestableSummary]
     
-    let TestableSummaries: [TestableSummary]
-    
-    struct TestableSummary: Codable {
-        let TestKind: String
-        let Tests: [Test]
-        
-        struct Test: Codable {
-            let Duration: TimeInterval
-            let TestName: String
-            let TestIdentifier: String
-            let Subtests: [Test]?
-            let ActivitySummaries: [ActivitySummary]?
-            
-            struct ActivitySummary: Codable {
-                let ActivityType: ActivityType
-                let SubActivities: [ActivitySummary]?
-                let Attachments: [Attachment]?
-                let StartTimeInterval: TimeInterval
-                let FinishTimeInterval: TimeInterval
-                let UUID: UUID
-                let Title: String
-                
-                enum ActivityType: Codable {
-                    case general
-                    case attachmentContainer
-                    case assertionFailure
-                    
-                    init(from decoder: Decoder) throws {
-                        let container = try decoder.singleValueContainer()
-                        let value = try container.decode(String.self)
-                        switch value {
-                        case "com.apple.dt.xctest.activity-type.testAssertionFailure": self = .assertionFailure
-                        case "com.apple.dt.xctest.activity-type.attachmentContainer": self = .attachmentContainer
-                        default: self = .general
-                        }
-                    }
-                    
-                    func encode(to encoder: Encoder) throws {
-                        fatalError()
-                    }
-                }
-                
-                struct Attachment: Codable {
-                    let Filename: String
-                }
-            }
-        }
+    enum CodingKeys: String, CodingKey {
+        case testableSummaries = "TestableSummaries"
     }
 }
 
+struct TestableSummary: Codable {
+    let testName: String
+    let testSummaryGroups: [TestSummaryGroup]
+    
+    enum CodingKeys: String, CodingKey {
+        case testName = "TestName"
+        case testSummaryGroups = "Tests"
+    }
+}
 
+struct TestSummaryGroup: Codable {
+    let testName: String
+    let testSummarySubGroups: [TestSummarySubGroup]
+    
+    enum CodingKeys: String, CodingKey {
+        case testName = "TestName"
+        case testSummarySubGroups = "Subtests"
+    }
+}
+
+struct TestSummarySubGroup: Codable {
+    let testName: String
+    let tests: [Test]
+    
+    enum CodingKeys: String, CodingKey {
+        case testName = "TestName"
+        case tests = "Subtests"
+    }
+}
+
+struct Test: Codable {
+    let testName: String
+    let subtests: [SubTest]
+    
+    enum CodingKeys: String, CodingKey {
+        case testName = "TestName"
+        case subtests = "Subtests"
+    }
+    
+    var containsFailures: Bool {
+        return subtests.first(where: { $0.failureSummaries != nil }) != nil
+    }
+}
+
+struct SubTest: Codable {
+    let testName: String
+    let activitySummaries: [ActivitySummary]
+    let failureSummaries: [FailureSummary]?
+    
+    enum CodingKeys: String, CodingKey {
+        case testName = "TestName"
+        case activitySummaries = "ActivitySummaries"
+        case failureSummaries = "FailureSummaries"
+    }
+}
+
+struct FailureSummary: Codable {
+    
+}
+
+struct ActivitySummary: Codable {
+    
+    typealias ActivityLevel = (activity: ActivitySummary, level: Int)
+    
+    let subActivities: [ActivitySummary]?
+    let attachments: [Attachment]?
+    let uuid: UUID
+    let title: String
+    
+    enum CodingKeys: String, CodingKey {
+        case subActivities = "SubActivities"
+        case attachments = "Attachments"
+        case uuid = "UUID"
+        case title = "Title"
+    }
+    
+    func allSummaryLevels(from level: Int = 0) -> [ActivityLevel] {
+        var allSummaries = [(self, level)]
+        if let subActivities = subActivities {
+            allSummaries.append(contentsOf: subActivities.flatMap { $0.allSummaryLevels(from: level + 1) })
+        }
+        return allSummaries
+    }
+    
+    var containsAttachment: Bool {
+        return allSummaryLevels().first(where: { $0.activity.attachments != nil }) != nil
+    }
+}
+
+struct Attachment: Codable {
+    let filename: String
+    
+    enum CodingKeys: String, CodingKey {
+        case filename = "Filename"
+    }
+}

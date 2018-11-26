@@ -63,7 +63,19 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "&apos;/Users/kanecheshire/Library/Developer/Xcode/DerivedData/BanklineMobile-glwsjnoykwzbczhfwnzdzhsrfaql/Logs/Test/Test-UI tests-2018.11.20_22-33-53-+0000.xcresult&apos;"
+            argument = "&apos;/Users/kanecheshire/Downloads/Test-UI tests-2018.11.19_18-29-59-+0000.xcresult&apos;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "&apos;/Users/kanecheshire/Library/Developer/Xcode/DerivedData/BanklineMobile-glwsjnoykwzbczhfwnzdzhsrfaql/Logs/Test/Test-UI tests-2018.11.25_23-51-37-+0000.xcresult&apos;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "&apos;/Users/kanecheshire/Downloads/Run-mock-2018.11.26_09-46-52-+0000.xcresult&apos;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "&apos;/Users/kanecheshire/Downloads/Run-UI tests-2018.11.26_11-31-30-+0000.xcresult&apos;"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

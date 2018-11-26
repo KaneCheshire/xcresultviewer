@@ -10,7 +10,6 @@
 		C385D4D321AB58A4008874E5 /* Array+Safe.swift in Sources */ = {isa = PBXBuildFile; fileRef = C385D4D221AB58A4008874E5 /* Array+Safe.swift */; };
 		C386B08121AB4E0D00814255 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = C386B08021AB4E0D00814255 /* main.swift */; };
 		C386B08521AB4E1D00814255 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = C359C7A221A2AFD00003408C /* Result.swift */; };
-		C386B08621AB4EAF00814255 /* Result+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C386B07621AB3DE300814255 /* Result+Helpers.swift */; };
 		C386B08921AB526300814255 /* ResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C386B08721AB51B500814255 /* ResultHandler.swift */; };
 /* End PBXBuildFile section */
 
@@ -29,7 +28,6 @@
 /* Begin PBXFileReference section */
 		C359C7A221A2AFD00003408C /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		C385D4D221AB58A4008874E5 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
-		C386B07621AB3DE300814255 /* Result+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Helpers.swift"; sourceTree = "<group>"; };
 		C386B07E21AB4E0C00814255 /* xcresultviewer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = xcresultviewer; sourceTree = BUILT_PRODUCTS_DIR; };
 		C386B08021AB4E0D00814255 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C386B08721AB51B500814255 /* ResultHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultHandler.swift; sourceTree = "<group>"; };
@@ -67,7 +65,6 @@
 			children = (
 				C386B08021AB4E0D00814255 /* main.swift */,
 				C359C7A221A2AFD00003408C /* Result.swift */,
-				C386B07621AB3DE300814255 /* Result+Helpers.swift */,
 				C386B08721AB51B500814255 /* ResultHandler.swift */,
 				C385D4D221AB58A4008874E5 /* Array+Safe.swift */,
 			);
@@ -135,7 +132,6 @@
 				C386B08521AB4E1D00814255 /* Result.swift in Sources */,
 				C385D4D321AB58A4008874E5 /* Array+Safe.swift in Sources */,
 				C386B08121AB4E0D00814255 /* main.swift in Sources */,
-				C386B08621AB4EAF00814255 /* Result+Helpers.swift in Sources */,
 				C386B08921AB526300814255 /* ResultHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

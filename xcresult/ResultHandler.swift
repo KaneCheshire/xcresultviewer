@@ -10,7 +10,9 @@ import AppKit
 
 struct ResultHandler {
     
-    func handle(resultURL url: URL) {
+    private var html = ""
+    
+    mutating func handle(resultURL url: URL) {
         guard url.pathExtension == "xcresult" else {
             return print("Provided path is not to an xcresult")
         }
@@ -33,109 +35,133 @@ struct ResultHandler {
             guard let result = try? PropertyListDecoder().decode(Result.self, from: data ?? Data()) else {
                 return print("Unable to decode Result object")
             }
-            handle(result: result, imagePaths: imagePaths)
+            handle(res: result, imagePaths:imagePaths)
         }
     }
     
-    private func ignoredActivityContents() -> [String] {
-        return ["snapshot accessibility hierarchy",
-                "to idle"]
-    }
-    
-    private func handle(result: Result, imagePaths: [String]) {
-        var html = """
-<html>
-    <head>
-        <style>
-            body, html {
-                padding:0;
-                margin:0;
-                background:black;
-                color:white;
-                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                font-weight: bold;
-            }
-            p {
-                padding:0; margin:0;
-            }
-            body {
-                padding:8pt;
-            }
-            .wrapper {
-                width: 100%;
-                overflow-y: hidden;
-                white-space: nowrap;
-                padding-bottom: 50px;
-                vertical-align: top;
-            }
-            section {
-                white-space: nowrap;
-                display:inline-block;
-                vertical-align: top;
-                padding:16pt;
-                background:rgb(24, 24, 24);
-                border-radius:5pt;
-            }
-            div.summary {
-                display:inline-block;
-                vertical-align: top;
-                padding:8pt 16pt 8pt;
-                margin:16pt 8pt 0 0;
-                background:rgb(39, 39, 39);
-                border-radius:5pt;
-            }
-            div.summary p {
-                padding:8pt 0;
-            }
-            img.screenshot {
-                border-radius:5pt;
-            }
-        </style>
-    </head>
-    <body><div id='top' class='wrapper'>
-"""
-        
-        result.TestableSummaries.forEach { summary in
-            summary.Tests.forEach { test in
-                test.ActivitySummaries?.forEach { summary in
-                    summary.allSummaries(from: 0).forEach { summary in
-                        
-                    }
-                }
-                let allTests = test.allTests(from: 0)
-                allTests.forEach { test in
-                    html += "<section><p>\(test.1.TestName)</p>"
-                    
-                    test.1.ActivitySummaries?.forEach { summary in
-                        html += "<div class='summary'>"
-                        
-                        summary.allSummaries(from: 0).forEach { summary in
-                            for ignoredContent in ignoredActivityContents() where summary.1.Title.lowercased().contains(ignoredContent) {
-                                return
+    private mutating func handle(res: Result, imagePaths: [String]) {
+        appendBegginingHTML()
+        res.testableSummaries.forEach { testableSummary in
+            html += "<section><p>\(testableSummary.testName)</p>"
+            testableSummary.testSummaryGroups.forEach { testSummaryGroup in
+                html += "<section><p>\(testSummaryGroup.testName)</p>"
+                testSummaryGroup.testSummarySubGroups.forEach { testSummarySubGroup in
+                    html += "<section><p>\(testSummarySubGroup.testName)</p>"
+                    testSummarySubGroup.tests.forEach { test in
+                        guard test.containsFailures else { return }
+                        html += "<section><p>\(test.testName)</p>"
+                        test.subtests.forEach { subtest in
+                            guard subtest.failureSummaries != nil else { return }
+                            html += "<section><p>\(subtest.testName)</p>"
+                            html += "<div class='summary'>"
+                            subtest.activitySummaries.forEach { activitySummary in
+                                let allSummaryLevels = activitySummary.allSummaryLevels()
+                                let displayableSummaries = allSummaryLevels.filter { activitySummaryLevel in
+                                    for ignoredContent in ignoredActivityContents() where activitySummaryLevel.activity.title.lowercased().contains(ignoredContent) {
+                                        return false
+                                    }
+                                    return activitySummaryLevel.activity.containsAttachment
+                                }
+                                displayableSummaries.forEach { activitySummaryLevel in
+                                    let indent = String(repeating: "&nbsp;&nbsp;", count: activitySummaryLevel.level)
+                                    html += "<p>\(indent)\(activitySummaryLevel.activity.title)</p>"
+                                    if let attachment = activitySummaryLevel.activity.attachments?.first, let imagePath = imagePaths.first(where: { $0.contains(attachment.filename) }) {
+                                        let url = URL(fileURLWithPath: imagePath)
+                                        html += "<p>\(indent)<img class='screenshot' src='\(url.absoluteString)' width='256'/></p>"
+                                    }
+                                }
                             }
-                            let indent = String(repeating: "&nbsp;&nbsp;", count: summary.0)
-                            if let attachment = summary.1.Attachments?.first, let imagePath = imagePaths.first(where: { $0.contains(attachment.Filename) }) {
-                                let url = URL(fileURLWithPath: imagePath)
-                                html += "<p>\(indent)\(summary.1.Title)</p><p>\(indent)<img class='screenshot' src='\(url.absoluteString)' width='256'/></p>"
-                            } else {
-                                html += "<p>\(indent)\(summary.1.Title)</p>"
-                            }
-                            
+                            html += "</div>"
+                            html += "</section>"
                         }
-                        html += "</div>"
+                        html += "</section>"
                     }
-                }
-                allTests.forEach { _ in
                     html += "</section>"
                 }
+                html += "</section>"
             }
+            html += "</section>"
         }
-        
-        html += "</div></body></html>"
+        appendClosingHTML()
         let fileURL = URL(string: "file:///Users/kanecheshire/xcresult.html")!
         let htmlData = Data(html.utf8)
         try! htmlData.write(to: fileURL)
         NSWorkspace.shared.open(fileURL)
+    }
+    
+    private mutating func appendBegginingHTML() {
+        html = """
+        <html>
+            <head>
+                <meta charset="utf-8">
+                <style>
+                body, html {
+                    padding:0;
+                    margin:0;
+                    background:black;
+                    color:white;
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    font-weight: bold;
+                }
+                p {
+                    padding:0; margin:0;
+                }
+                .wrapper {
+                    width: 100%;
+                    overflow-y: hidden;
+                    white-space: nowrap;
+                    vertical-align: top;
+                }
+                section {
+                    white-space: nowrap;
+                    display:inline-block;
+                    vertical-align:top;
+                    margin:8pt;
+                    padding:16pt;
+                    border-radius:6pt;
+                    background:rgb(10, 10, 10);
+                }
+                section section {
+                    padding:0;
+                    margin:8pt 0 0 8pt;
+                }
+                section > p {
+                    padding:0 0 8pt;
+                }
+                div.summary {
+                    display:inline-block;
+                    vertical-align: top;
+                    border-radius:5pt;
+                }
+                div.summary p {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    padding:8pt 0;
+                    max-width:640pt;
+                }
+                img.screenshot {
+                    border-radius:5pt;
+                }
+            </style>
+        </head>
+        <body>
+        <div class='wrapper'>
+        """
+    }
+    
+    private mutating func appendClosingHTML() {
+        html += """
+        </div>
+        </body>
+        </html>
+        """
+    }
+    
+    private func ignoredActivityContents() -> [String] {
+        return ["snapshot accessibility hierarchy",
+                "to idle",
+                "synthesize event"]
     }
     
 }
