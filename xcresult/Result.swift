@@ -94,6 +94,7 @@ struct ActivitySummary: Codable {
     let uuid: UUID
     let title: String
     let startTimeInterval: TimeInterval
+    let finishTimeInterval: TimeInterval
     
     enum CodingKeys: String, CodingKey {
         case subActivities = "SubActivities"
@@ -101,6 +102,7 @@ struct ActivitySummary: Codable {
         case uuid = "UUID"
         case title = "Title"
         case startTimeInterval = "StartTimeInterval"
+        case finishTimeInterval = "FinishTimeInterval"
         case activityType = "ActivityType"
     }
     
@@ -114,6 +116,10 @@ struct ActivitySummary: Codable {
     
     var containsAttachment: Bool {
         return allSummaryLevels().first(where: { $0.activity.attachments != nil }) != nil
+    }
+    
+    var duration: TimeInterval {
+        return Double(Int((finishTimeInterval - startTimeInterval) * 100)) / 100
     }
 }
 

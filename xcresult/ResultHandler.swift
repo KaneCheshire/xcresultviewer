@@ -65,7 +65,8 @@ struct ResultHandler {
                                 displayableSummaries.forEach { activitySummaryLevel in
                                     let indent = String(repeating: "&nbsp;&nbsp;", count: activitySummaryLevel.level)
                                     let cssClass = activitySummaryLevel.activity.activityType == .userCreated ? "user-activity" : ""
-                                    html += "<p class='\(cssClass)'>\(indent)\(activitySummaryLevel.activity.title)</p>"
+                                    let duration = "(\(activitySummaryLevel.activity.duration)s)"
+                                    html += "<p class='\(cssClass)'>\(indent)\(activitySummaryLevel.activity.title) \(duration)</p>"
                                     if let attachment = activitySummaryLevel.activity.attachments?.first, let imagePath = imagePaths.first(where: { $0.contains(attachment.filename) }) {
                                         let url = URL(fileURLWithPath: imagePath)
                                         html += "<p>\(indent)<img class='screenshot' src='\(url.absoluteString)' width='256'/></p>"
