@@ -85,7 +85,7 @@ struct ResultHandler {
             html += "</section>"
         }
         appendClosingHTML()
-        let fileURL = URL(string: "file:///Users/kanecheshire/xcresult.html")!
+        let fileURL = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("xcresult.html")
         let htmlData = Data(html.utf8)
         try! htmlData.write(to: fileURL)
         NSWorkspace.shared.open(fileURL)
