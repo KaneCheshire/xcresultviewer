@@ -1,80 +1,12 @@
 //
-//  Result.swift
-//  XCResultViewer
+//  ActivitySummary.swift
+//  xcresultviewer
 //
-//  Created by Kane Cheshire on 19/11/2018.
+//  Created by Kane Cheshire on 27/11/2018.
 //  Copyright © 2018 kane.codes. All rights reserved.
 //
 
 import Foundation
-
-struct Result: Codable {
-    let testableSummaries: [TestableSummary]
-    
-    enum CodingKeys: String, CodingKey {
-        case testableSummaries = "TestableSummaries"
-    }
-}
-
-struct TestableSummary: Codable {
-    let testName: String
-    let testSummaryGroups: [TestSummaryGroup]
-    
-    enum CodingKeys: String, CodingKey {
-        case testName = "TestName"
-        case testSummaryGroups = "Tests"
-    }
-}
-
-struct TestSummaryGroup: Codable {
-    let testName: String
-    let testSummarySubGroups: [TestSummarySubGroup]
-    
-    enum CodingKeys: String, CodingKey {
-        case testName = "TestName"
-        case testSummarySubGroups = "Subtests"
-    }
-}
-
-struct TestSummarySubGroup: Codable {
-    let testName: String
-    let tests: [Test]
-    
-    enum CodingKeys: String, CodingKey {
-        case testName = "TestName"
-        case tests = "Subtests"
-    }
-}
-
-struct Test: Codable {
-    let testName: String
-    let subtests: [SubTest]
-    
-    enum CodingKeys: String, CodingKey {
-        case testName = "TestName"
-        case subtests = "Subtests"
-    }
-    
-    var containsFailures: Bool {
-        return subtests.first(where: { $0.failureSummaries != nil }) != nil
-    }
-}
-
-struct SubTest: Codable {
-    let testName: String
-    let activitySummaries: [ActivitySummary]
-    let failureSummaries: [FailureSummary]?
-    
-    enum CodingKeys: String, CodingKey {
-        case testName = "TestName"
-        case activitySummaries = "ActivitySummaries"
-        case failureSummaries = "FailureSummaries"
-    }
-}
-
-struct FailureSummary: Codable {
-    
-}
 
 struct ActivitySummary: Codable {
     
@@ -120,13 +52,5 @@ struct ActivitySummary: Codable {
     
     var duration: TimeInterval {
         return Double(Int((finishTimeInterval - startTimeInterval) * 100)) / 100
-    }
-}
-
-struct Attachment: Codable {
-    let filename: String
-    
-    enum CodingKeys: String, CodingKey {
-        case filename = "Filename"
     }
 }
