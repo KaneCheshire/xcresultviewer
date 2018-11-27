@@ -8,6 +8,4 @@
 
 import Foundation
 
-struct FailureSummary: Codable {
-    
-}
+struct FailureSummary: Codable {}

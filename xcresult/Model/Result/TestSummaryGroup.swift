@@ -8,12 +8,18 @@
 
 import Foundation
 
-struct TestSummaryGroup: Codable {
+struct TestSummaryGroup {
+    
     let testName: String
     let testSummarySubGroups: [TestSummarySubGroup]
+    
+}
+
+extension TestSummaryGroup: Codable {
     
     enum CodingKeys: String, CodingKey {
         case testName = "TestName"
         case testSummarySubGroups = "Subtests"
     }
+    
 }

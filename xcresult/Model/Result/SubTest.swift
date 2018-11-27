@@ -8,14 +8,20 @@
 
 import Foundation
 
-struct SubTest: Codable {
+struct SubTest {
+    
     let testName: String
     let activitySummaries: [ActivitySummary]
     let failureSummaries: [FailureSummary]?
+    
+}
+
+extension SubTest: Codable {
     
     enum CodingKeys: String, CodingKey {
         case testName = "TestName"
         case activitySummaries = "ActivitySummaries"
         case failureSummaries = "FailureSummaries"
     }
+    
 }

@@ -8,11 +8,17 @@
 
 import Foundation
 
-struct Result: Codable {
+struct Result {
+    
     let testableSummaries: [TestableSummary]
+    
+}
+
+extension Result: Codable {
     
     enum CodingKeys: String, CodingKey {
         case testableSummaries = "TestableSummaries"
     }
+    
 }
 

@@ -8,9 +8,26 @@
 
 import Foundation
 
-struct ActivitySummary: Codable {
+struct ActivitySummary {
     
-    typealias ActivityLevel = (activity: ActivitySummary, level: Int)
+    let activityType: ActivityType
+    let subActivities: [ActivitySummary]?
+    let attachments: [Attachment]?
+    let uuid: UUID
+    let title: String
+    let startTimeInterval: TimeInterval
+    let finishTimeInterval: TimeInterval
+    
+    var containsAttachment: Bool {
+        return allSummaryLevels().first(where: { $0.activity.attachments != nil }) != nil
+    }
+    
+    var duration: TimeInterval {
+        return Double(Int((finishTimeInterval - startTimeInterval) * 100)) / 100
+    }
+}
+
+extension ActivitySummary {
     
     enum ActivityType: String, Codable {
         case userCreated = "com.apple.dt.xctest.activity-type.userCreated"
@@ -20,13 +37,23 @@ struct ActivitySummary: Codable {
         case deletedAttachment = "com.apple.dt.xctest.activity-type.deletedAttachment"
     }
     
-    let activityType: ActivityType
-    let subActivities: [ActivitySummary]?
-    let attachments: [Attachment]?
-    let uuid: UUID
-    let title: String
-    let startTimeInterval: TimeInterval
-    let finishTimeInterval: TimeInterval
+}
+
+extension ActivitySummary {
+    
+    typealias ActivitySummaryLevel = (activity: ActivitySummary, level: Int)
+    
+    func allSummaryLevels(from level: Int = 0) -> [ActivitySummaryLevel] {
+        var allSummaries = [(self, level)]
+        if let subActivities = subActivities {
+            allSummaries.append(contentsOf: subActivities.flatMap { $0.allSummaryLevels(from: level + 1) })
+        }
+        return allSummaries
+    }
+    
+}
+
+extension ActivitySummary: Codable {
     
     enum CodingKeys: String, CodingKey {
         case subActivities = "SubActivities"
@@ -38,19 +65,4 @@ struct ActivitySummary: Codable {
         case activityType = "ActivityType"
     }
     
-    func allSummaryLevels(from level: Int = 0) -> [ActivityLevel] {
-        var allSummaries = [(self, level)]
-        if let subActivities = subActivities {
-            allSummaries.append(contentsOf: subActivities.flatMap { $0.allSummaryLevels(from: level + 1) })
-        }
-        return allSummaries
-    }
-    
-    var containsAttachment: Bool {
-        return allSummaryLevels().first(where: { $0.activity.attachments != nil }) != nil
-    }
-    
-    var duration: TimeInterval {
-        return Double(Int((finishTimeInterval - startTimeInterval) * 100)) / 100
-    }
 }

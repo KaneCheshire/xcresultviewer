@@ -8,11 +8,14 @@
 
 import AppKit
 
+/// Handles turning an xcresult into html and displaying to the user
 struct ResultHandler {
     
-    private var html = ""
+    // MARK: - Functions -
+    // MARK: Internal
     
-    mutating func handle(resultURL url: URL) {
+    /// Handles a URL, expecting the URL to be a path to an xcresult directory.
+    func handle(resultURL url: URL) {
         guard url.pathExtension == "xcresult" else {
             return print("Provided path is not to an xcresult")
         }
@@ -20,7 +23,7 @@ struct ResultHandler {
             return print("Unable to create summaries enumerator")
         }
         let summariesPaths: [String] = summariesEnumerator.compactMap { thing in
-            guard let path = thing as? String, path.contains("action_TestSummaries") else { return nil }
+            guard let path = thing as? String, path.contains("action_TestSummaries.plist") else { return nil }
             return path
         }
         summariesPaths.forEach { summaryPath in
@@ -32,10 +35,12 @@ struct ResultHandler {
         }
     }
     
-    private mutating func handle(res: Result, xcresultURL: URL) {
-        appendBegginingHTML()
+    // MARK: - Private -
+    
+    private func handle(res: Result, xcresultURL: URL) {
+        var html = initialHTML()
         res.testableSummaries.forEach { testableSummary in
-            handle(testableSummary: testableSummary)
+            handle(testableSummary: testableSummary, html: &html)
         }
         html += "</div></body></html>"
         let fileURL = xcresultURL.appendingPathComponent("xcresult.html")
@@ -48,8 +53,8 @@ struct ResultHandler {
         }
     }
     
-    private mutating func appendBegginingHTML() {
-        html = """
+    private func initialHTML() -> String {
+        return """
         <html><head>
                 <meta charset="utf-8">
                 <style>
@@ -111,62 +116,66 @@ struct ResultHandler {
         """
     }
     
-    private mutating func handle(testableSummary: TestableSummary) {
+    private func handle(testableSummary: TestableSummary, html: inout String) {
         html += "<section><p>\(testableSummary.testName)</p>"
         testableSummary.testSummaryGroups.forEach { testSummaryGroup in
-            handle(testSummaryGroup: testSummaryGroup)
+            handle(testSummaryGroup: testSummaryGroup, html: &html)
         }
         html += "</section>"
     }
     
-    private mutating func handle(testSummaryGroup: TestSummaryGroup) {
+    private func handle(testSummaryGroup: TestSummaryGroup, html: inout String) {
         html += "<section><p>\(testSummaryGroup.testName)</p>"
         testSummaryGroup.testSummarySubGroups.forEach { testSummarySubGroup in
-            handle(testSummarySubGroup: testSummarySubGroup)
+            handle(testSummarySubGroup: testSummarySubGroup, html: &html)
         }
         html += "</section>"
     }
     
-    private mutating func handle(testSummarySubGroup: TestSummarySubGroup) {
+    private func handle(testSummarySubGroup: TestSummarySubGroup, html: inout String) {
         html += "<section><p>\(testSummarySubGroup.testName)</p>"
         testSummarySubGroup.tests.forEach { test in
-            handle(test: test)
+            handle(test: test, html: &html)
         }
         html += "</section>"
     }
     
-    private mutating func handle(test: Test) {
+    private func handle(test: Test, html: inout String) {
         guard test.containsFailures else { return }
         html += "<section><p>\(test.testName)</p>"
         test.subtests.forEach { subtest in
-            handle(subtest: subtest)
+            handle(subtest: subtest, html: &html)
         }
         html += "</section>"
     }
     
-    private mutating func handle(subtest: SubTest) {
+    private func handle(subtest: SubTest, html: inout String) {
         guard subtest.failureSummaries != nil else { return }
         html += "<section><p>\(subtest.testName)</p><div class='summary'>"
         subtest.activitySummaries.forEach { activitySummary in
-            handle(activitySummary: activitySummary)
+            handle(activitySummary: activitySummary, html: &html)
         }
         html += "</div></section>"
     }
     
-    private mutating func handle(activitySummary: ActivitySummary) {
+    private func handle(activitySummary: ActivitySummary, html: inout String) {
         let allSummaryLevels = activitySummary.allSummaryLevels()
         let displayableSummaries = allSummaryLevels.filter { activitySummaryLevel in
             guard !activitySummaryLevel.activity.title.contains("snapshot accessibility hierarchy") else { return false }
             return activitySummaryLevel.activity.containsAttachment
         }
         displayableSummaries.forEach { activitySummaryLevel in
-            let indent = String(repeating: "&nbsp;&nbsp;", count: activitySummaryLevel.level)
-            let cssClass = activitySummaryLevel.activity.activityType == .userCreated ? "user-activity" : ""
-            let duration = "(\(activitySummaryLevel.activity.duration)s)"
-            html += "<p class='\(cssClass)'>\(indent)\(activitySummaryLevel.activity.title) \(duration)</p>"
-            activitySummaryLevel.activity.attachments?.forEach { attachment in
-                html += "<p>\(indent)<img class='screenshot' src='attachments/\(attachment.filename)' width='256'/></p>"
-            }
+            handle(activitySummaryLevel: activitySummaryLevel, html: &html)
+        }
+    }
+    
+    private func handle(activitySummaryLevel: ActivitySummary.ActivitySummaryLevel, html: inout String) {
+        let indent = String(repeating: "&nbsp;&nbsp;", count: activitySummaryLevel.level)
+        let cssClass = activitySummaryLevel.activity.activityType == .userCreated ? "user-activity" : ""
+        let duration = "(\(activitySummaryLevel.activity.duration)s)"
+        html += "<p class='\(cssClass)'>\(indent)\(activitySummaryLevel.activity.title) \(duration)</p>"
+        activitySummaryLevel.activity.attachments?.forEach { attachment in
+            html += "<p>\(indent)<img class='screenshot' src='attachments/\(attachment.filename)' width='256'/></p>"
         }
     }
 }
