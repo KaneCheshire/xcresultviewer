@@ -22,14 +22,11 @@ struct ResultHandler {
         guard let summariesEnumerator = FileManager.default.enumerator(atPath: url.path) else {
             return print("Unable to create summaries enumerator")
         }
-        let summariesPaths: [String] = summariesEnumerator.compactMap { thing in
-            guard let path = thing as? String, path.contains("action_TestSummaries.plist") else { return nil }
-            return path
-        }
-        summariesPaths.forEach { summaryPath in
-            let data = try? Data(contentsOf: url.appendingPathComponent(summaryPath))
+        summariesEnumerator.forEach { thing in
+            guard let path = thing as? String, path.contains("action_TestSummaries.plist") else { return }
+            let data = try? Data(contentsOf: url.appendingPathComponent(path))
             guard let result = try? PropertyListDecoder().decode(Result.self, from: data ?? Data()) else {
-                return print("Unable to decode Result object")
+                return print("Unable to decode Result object from plist at path", path)
             }
             handle(res: result, xcresultURL: url)
         }
@@ -71,7 +68,6 @@ struct ResultHandler {
                 }
                 .wrapper {
                     width: 100%;
-                    overflow-y: hidden;
                     white-space: nowrap;
                     vertical-align: top;
                 }
@@ -102,12 +98,16 @@ struct ResultHandler {
                     text-overflow: ellipsis;
                     padding:8pt 0;
                     max-width:640pt;
+                    -webkit-backdrop-filter: blur(2px);
+                    background:rgba(10, 10, 10, 0.5);
+                    box-shadow: 0 2pt 10pt 0 rgba(10, 10, 10, 0.9);
+                    z-index:1;
                 }
                 img.screenshot {
                     border-radius:20pt;
                 }
                 p.user-activity {
-                    background:rgb(42, 42, 42);
+                    background:rgb(42, 42, 42) !important;
                     border-radius:5pt;
                     padding-left:8pt !important;
                 }
@@ -173,9 +173,10 @@ struct ResultHandler {
         let indent = String(repeating: "&nbsp;&nbsp;", count: activitySummaryLevel.level)
         let cssClass = activitySummaryLevel.activity.activityType == .userCreated ? "user-activity" : ""
         let duration = "(\(activitySummaryLevel.activity.duration)s)"
-        html += "<p class='\(cssClass)'>\(indent)\(activitySummaryLevel.activity.title) \(duration)</p>"
+        html += "<div><p style='position:-webkit-sticky;top:0;' class='\(cssClass)'>\(indent)\(activitySummaryLevel.activity.title) \(duration)</p>"
         activitySummaryLevel.activity.attachments?.forEach { attachment in
             html += "<p>\(indent)<img class='screenshot' src='attachments/\(attachment.filename)' width='256'/></p>"
         }
+        html += "</div>"
     }
 }

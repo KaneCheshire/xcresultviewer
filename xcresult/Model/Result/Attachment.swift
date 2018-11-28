@@ -8,10 +8,16 @@
 
 import Foundation
 
-struct Attachment: Codable {
+struct Attachment {
+    
     let filename: String
+    
+}
+
+extension Attachment: Codable {
     
     enum CodingKeys: String, CodingKey {
         case filename = "Filename"
     }
+    
 }
