@@ -98,7 +98,6 @@ struct ResultHandler {
                     text-overflow: ellipsis;
                     padding:8pt 0;
                     max-width:640pt;
-                    -webkit-backdrop-filter: blur(2px);
                     background:rgba(10, 10, 10, 0.5);
                     box-shadow: 0 2pt 10pt 0 rgba(10, 10, 10, 0.9);
                     z-index:1;
@@ -134,7 +133,7 @@ struct ResultHandler {
     
     private func handle(testSummarySubGroup: TestSummarySubGroup, html: inout String) {
         html += "<section><p>\(testSummarySubGroup.testName)</p>"
-        testSummarySubGroup.tests.forEach { test in
+        testSummarySubGroup.tests.reversed().forEach { test in
             handle(test: test, html: &html)
         }
         html += "</section>"
@@ -152,7 +151,7 @@ struct ResultHandler {
     private func handle(subtest: SubTest, html: inout String) {
         guard subtest.failureSummaries != nil else { return }
         html += "<section><p>\(subtest.testName)</p><div class='summary'>"
-        subtest.activitySummaries.forEach { activitySummary in
+        subtest.activitySummaries.reversed().forEach { activitySummary in
             handle(activitySummary: activitySummary, html: &html)
         }
         html += "</div></section>"
@@ -164,7 +163,7 @@ struct ResultHandler {
             guard !activitySummaryLevel.activity.title.contains("snapshot accessibility hierarchy") else { return false }
             return activitySummaryLevel.activity.containsAttachment
         }
-        displayableSummaries.forEach { activitySummaryLevel in
+        displayableSummaries.reversed().forEach { activitySummaryLevel in
             handle(activitySummaryLevel: activitySummaryLevel, html: &html)
         }
     }
