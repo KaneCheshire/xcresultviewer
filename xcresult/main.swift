@@ -29,7 +29,7 @@ if let resultArgument = ProcessInfo.processInfo.arguments[safeAt: 1] {
 			let url = URL(fileURLWithPath: urlString)
 			ResultHandler().handle(resultURL: url, shouldOpenResultFile: shouldOpenResultFile)
 		}
-	default:
+	case .default:
 		let url = URL(fileURLWithPath: resultArgument)
 		ResultHandler().handle(resultURL: url, shouldOpenResultFile: shouldOpenResultFile)
 	}
