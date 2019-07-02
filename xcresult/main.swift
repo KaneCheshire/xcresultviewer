@@ -28,6 +28,8 @@ if let resultArgument = ProcessInfo.processInfo.arguments[safeAt: 1] {
 		if let urlString = ProcessInfo.processInfo.arguments[safeAt: 2] {
 			let url = URL(fileURLWithPath: urlString)
 			ResultHandler().handle(resultURL: url, shouldOpenResultFile: shouldOpenResultFile)
+		} else {
+			print("Missing path to xcresult")
 		}
 	case .default:
 		let url = URL(fileURLWithPath: resultArgument)
