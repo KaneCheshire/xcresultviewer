@@ -8,21 +8,23 @@
 
 import Foundation
 
-struct Test {
+struct TestCase {
     
-    let testName: String
-    let subtests: [SubTest]
+    let name: String
+    let tests: [Test]
+    let duration: TimeInterval
     
     var containsFailures: Bool {
-        return subtests.first(where: { $0.failureSummaries != nil }) != nil
+        return tests.first(where: { $0.failureSummaries != nil }) != nil
     }
 }
 
-extension Test: Codable {
+extension TestCase: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case testName = "TestName"
-        case subtests = "Subtests"
+        case name = "TestName"
+        case tests = "Subtests"
+        case duration = "Duration"
     }
     
 }

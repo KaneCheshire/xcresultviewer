@@ -10,14 +10,14 @@ import Foundation
 
 struct Result {
     
-    let testableSummaries: [TestableSummary]
+    let testTargets: [TestTarget]
     
 }
 
 extension Result: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case testableSummaries = "TestableSummaries"
+        case testTargets = "TestableSummaries"
     }
     
 }

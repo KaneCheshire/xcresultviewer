@@ -28,7 +28,8 @@ struct ResultHandler {
             guard let result = try? PropertyListDecoder().decode(Result.self, from: data ?? Data()) else {
                 return print("Unable to decode Result object from plist at path", path)
             }
-            handle(res: result, xcresultURL: url)
+            Analyzer().analyze(result: result)
+//            handle(res: result, xcresultURL: url)
         }
     }
     
@@ -36,8 +37,8 @@ struct ResultHandler {
     
     private func handle(res: Result, xcresultURL: URL) {
         var html = initialHTML()
-        res.testableSummaries.forEach { testableSummary in
-            handle(testableSummary: testableSummary, html: &html)
+        res.testTargets.forEach { testTarget in
+            handle(testTarget: testTarget, html: &html)
         }
         html += "</div></body></html>"
         let fileURL = xcresultURL.appendingPathComponent("xcresult.html")
@@ -115,43 +116,43 @@ struct ResultHandler {
         """
     }
     
-    private func handle(testableSummary: TestableSummary, html: inout String) {
-        html += "<section><p>\(testableSummary.testName)</p>"
-        testableSummary.testSummaryGroups.forEach { testSummaryGroup in
-            handle(testSummaryGroup: testSummaryGroup, html: &html)
+    private func handle(testTarget: TestTarget, html: inout String) {
+        html += "<section><p>\(testTarget.name)</p>"
+        testTarget.testSuites.forEach { testSuite in
+            handle(testSuite: testSuite, html: &html)
         }
         html += "</section>"
     }
     
-    private func handle(testSummaryGroup: TestSummaryGroup, html: inout String) {
-        html += "<section><p>\(testSummaryGroup.testName)</p>"
-        testSummaryGroup.testSummarySubGroups.forEach { testSummarySubGroup in
-            handle(testSummarySubGroup: testSummarySubGroup, html: &html)
+    private func handle(testSuite: TestSuite, html: inout String) {
+        html += "<section><p>\(testSuite.name)</p>"
+        testSuite.subTestSuites.forEach { subTestSuite in
+            handle(subTestSuite: subTestSuite, html: &html)
         }
         html += "</section>"
     }
     
-    private func handle(testSummarySubGroup: TestSummarySubGroup, html: inout String) {
-        html += "<section><p>\(testSummarySubGroup.testName)</p>"
-        testSummarySubGroup.tests.reversed().forEach { test in
+    private func handle(subTestSuite: SubTestSuite, html: inout String) {
+        html += "<section><p>\(subTestSuite.name)</p>"
+        subTestSuite.testCases.reversed().forEach { testCase in
+            handle(testCase: testCase, html: &html)
+        }
+        html += "</section>"
+    }
+    
+    private func handle(testCase: TestCase, html: inout String) {
+        guard testCase.containsFailures else { return }
+        html += "<section><p>\(testCase.name)</p>"
+        testCase.tests.forEach { test in
             handle(test: test, html: &html)
         }
         html += "</section>"
     }
     
     private func handle(test: Test, html: inout String) {
-        guard test.containsFailures else { return }
-        html += "<section><p>\(test.testName)</p>"
-        test.subtests.forEach { subtest in
-            handle(subtest: subtest, html: &html)
-        }
-        html += "</section>"
-    }
-    
-    private func handle(subtest: SubTest, html: inout String) {
-        guard subtest.failureSummaries != nil else { return }
-        html += "<section><p>\(subtest.testName)</p><div class='summary'>"
-        subtest.activitySummaries.reversed().forEach { activitySummary in
+        guard test.failureSummaries != nil else { return }
+        html += "<section><p>\(test.name)</p><div class='summary'>"
+        test.activitySummaries.reversed().forEach { activitySummary in
             handle(activitySummary: activitySummary, html: &html)
         }
         html += "</div></section>"

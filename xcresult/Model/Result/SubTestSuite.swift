@@ -1,5 +1,5 @@
 //
-//  TestSummarySubGroup.swift
+//  SubTestSuite.swift
 //  xcresultviewer
 //
 //  Created by Kane Cheshire on 27/11/2018.
@@ -8,18 +8,18 @@
 
 import Foundation
 
-struct TestSummarySubGroup {
+struct SubTestSuite {
     
-    let testName: String
-    let tests: [Test]
+    let name: String
+    let testCases: [TestCase]
     
 }
 
-extension TestSummarySubGroup: Codable {
+extension SubTestSuite: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case testName = "TestName"
-        case tests = "Subtests"
+        case name = "TestName"
+        case testCases = "Subtests"
     }
     
 }
