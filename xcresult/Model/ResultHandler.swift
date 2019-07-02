@@ -15,7 +15,7 @@ struct ResultHandler {
     // MARK: Internal
     
     /// Handles a URL, expecting the URL to be a path to an xcresult directory.
-    func handle(resultURL url: URL) {
+	func handle(resultURL url: URL, shouldOpenResultFile: Bool) {
         guard url.pathExtension == "xcresult" else {
             return print("Provided path is not to an xcresult")
         }
@@ -28,13 +28,13 @@ struct ResultHandler {
             guard let result = try? PropertyListDecoder().decode(Result.self, from: data ?? Data()) else {
                 return print("Unable to decode Result object from plist at path", path)
             }
-            handle(res: result, xcresultURL: url)
+            handle(res: result, xcresultURL: url, shouldOpenResultFile: shouldOpenResultFile)
         }
     }
     
     // MARK: - Private -
     
-    private func handle(res: Result, xcresultURL: URL) {
+	private func handle(res: Result, xcresultURL: URL, shouldOpenResultFile: Bool) {
         var html = initialHTML()
         res.testableSummaries.forEach { testableSummary in
             handle(testableSummary: testableSummary, html: &html)
@@ -44,7 +44,11 @@ struct ResultHandler {
         let htmlData = Data(html.utf8)
         do {
             try htmlData.write(to: fileURL)
-            NSWorkspace.shared.open(fileURL)
+			if shouldOpenResultFile {
+				NSWorkspace.shared.open(fileURL)
+			} else {
+				print("You can find the generated HTML at \(fileURL.absoluteString).")
+			}
         } catch {
             print("Unable to write html to url", fileURL, error.localizedDescription)
         }
