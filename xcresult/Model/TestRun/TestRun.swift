@@ -1,5 +1,5 @@
 //
-//  Result.swift
+//  TestRun.swift
 //  XCResultViewer
 //
 //  Created by Kane Cheshire on 19/11/2018.
@@ -8,16 +8,16 @@
 
 import Foundation
 
-struct Result {
+struct TestRun {
     
-    let testableSummaries: [TestableSummary]
+    let testTargets: [TestTarget]
     
 }
 
-extension Result: Codable {
+extension TestRun: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case testableSummaries = "TestableSummaries"
+        case testTargets = "TestableSummaries"
     }
     
 }

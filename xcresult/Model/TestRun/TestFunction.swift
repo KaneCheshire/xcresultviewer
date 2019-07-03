@@ -1,5 +1,5 @@
 //
-//  SubTest.swift
+//  Test.swift
 //  xcresultviewer
 //
 //  Created by Kane Cheshire on 27/11/2018.
@@ -8,20 +8,22 @@
 
 import Foundation
 
-struct SubTest {
+struct Test {
     
-    let testName: String
+    let name: String
     let activitySummaries: [ActivitySummary]
     let failureSummaries: [FailureSummary]?
+    let duration: TimeInterval
     
 }
 
-extension SubTest: Codable {
+extension Test: Codable {
     
     enum CodingKeys: String, CodingKey {
-        case testName = "TestName"
+        case name = "TestName"
         case activitySummaries = "ActivitySummaries"
         case failureSummaries = "FailureSummaries"
+        case duration = "Duration"
     }
     
 }
