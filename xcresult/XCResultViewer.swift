@@ -21,7 +21,7 @@ struct XCResultViewer {
                 analyzer.analyze()
             } else {
                 let failurePageGenerator = FailurePageGenerator(testRun: testRun, xcresultURL: url)
-                failurePageGenerator.generate(shouldOpenBrowser: !flags.contains(.skipOpenPage))
+                failurePageGenerator.generate(shouldOpenBrowser: !flags.contains(.skipOpenBrowser))
             }
         }
     }
@@ -33,12 +33,12 @@ private extension XCResultViewer {
     enum Flag {
         
         case analyze
-        case skipOpenPage
+        case skipOpenBrowser
         
         init?(rawValue: String) {
             switch rawValue {
             case "-a", "--analyze": self = .analyze
-            case "-s", "--skip-open-page": self = .skipOpenPage
+            case "-s", "--skip-open-browser": self = .skipOpenBrowser
             default: return nil
             }
         }
