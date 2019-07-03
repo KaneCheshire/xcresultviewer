@@ -15,7 +15,7 @@ struct ResultHandler {
     // MARK: Internal
     
     /// Handles a URL, expecting the URL to be a path to an xcresult directory.
-	func handle(resultURL url: URL, shouldOpenResultFile: Bool) {
+    func handle(resultURL url: URL, shouldOpenResultFile: Bool) {
         guard url.pathExtension == "xcresult" else {
             return print("Provided path is not to an xcresult")
         }
@@ -34,7 +34,7 @@ struct ResultHandler {
     
     // MARK: - Private -
     
-	private func handle(res: Result, xcresultURL: URL, shouldOpenResultFile: Bool) {
+    private func handle(res: Result, xcresultURL: URL, shouldOpenResultFile: Bool) {
         var html = initialHTML()
         res.testableSummaries.forEach { testableSummary in
             handle(testableSummary: testableSummary, html: &html)
@@ -44,11 +44,11 @@ struct ResultHandler {
         let htmlData = Data(html.utf8)
         do {
             try htmlData.write(to: fileURL)
-			if shouldOpenResultFile {
-				NSWorkspace.shared.open(fileURL)
-			} else {
-				print("You can find the generated HTML at \(fileURL.absoluteString).")
-			}
+            if shouldOpenResultFile {
+                NSWorkspace.shared.open(fileURL)
+            } else {
+                print("You can find the generated HTML at \(fileURL.absoluteString).")
+            }
         } catch {
             print("Unable to write html to url", fileURL, error.localizedDescription)
         }
@@ -57,64 +57,64 @@ struct ResultHandler {
     private func initialHTML() -> String {
         return """
         <html><head>
-                <meta charset="utf-8">
-                <style>
-                body, html {
-                    padding:0;
-                    margin:0;
-                    background:black;
-                    color:white;
-                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-                    font-weight: bold;
-                }
-                p {
-                    padding:0; margin:0;
-                }
-                .wrapper {
-                    width: 100%;
-                    white-space: nowrap;
-                    vertical-align: top;
-                }
-                section {
-                    white-space: nowrap;
-                    display:inline-block;
-                    vertical-align:top;
-                    margin:8pt;
-                    padding:16pt;
-                    border-radius:6pt;
-                    background:rgb(10, 10, 10);
-                }
-                section section {
-                    padding:0;
-                    margin:8pt 0 0 8pt;
-                }
-                section > p {
-                    padding:0 0 8pt;
-                }
-                div.summary {
-                    display:inline-block;
-                    vertical-align: top;
-                    border-radius:5pt;
-                }
-                div.summary p {
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    padding:8pt 0;
-                    max-width:640pt;
-                    background:rgba(10, 10, 10, 0.5);
-                    box-shadow: 0 2pt 10pt 0 rgba(10, 10, 10, 0.9);
-                    z-index:1;
-                }
-                img.screenshot {
-                    border-radius:20pt;
-                }
-                p.user-activity {
-                    background:rgb(42, 42, 42) !important;
-                    border-radius:5pt;
-                    padding-left:8pt !important;
-                }
-            </style>
+        <meta charset="utf-8">
+        <style>
+        body, html {
+        padding:0;
+        margin:0;
+        background:black;
+        color:white;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: bold;
+        }
+        p {
+        padding:0; margin:0;
+        }
+        .wrapper {
+        width: 100%;
+        white-space: nowrap;
+        vertical-align: top;
+        }
+        section {
+        white-space: nowrap;
+        display:inline-block;
+        vertical-align:top;
+        margin:8pt;
+        padding:16pt;
+        border-radius:6pt;
+        background:rgb(10, 10, 10);
+        }
+        section section {
+        padding:0;
+        margin:8pt 0 0 8pt;
+        }
+        section > p {
+        padding:0 0 8pt;
+        }
+        div.summary {
+        display:inline-block;
+        vertical-align: top;
+        border-radius:5pt;
+        }
+        div.summary p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding:8pt 0;
+        max-width:640pt;
+        background:rgba(10, 10, 10, 0.5);
+        box-shadow: 0 2pt 10pt 0 rgba(10, 10, 10, 0.9);
+        z-index:1;
+        }
+        img.screenshot {
+        border-radius:20pt;
+        }
+        p.user-activity {
+        background:rgb(42, 42, 42) !important;
+        border-radius:5pt;
+        padding-left:8pt !important;
+        }
+        </style>
         </head><body><div class='wrapper'>
         """
     }
