@@ -8,4 +8,4 @@
 
 import Foundation
 
-_ = try XCResultViewer()
+_ = XCResultViewer()

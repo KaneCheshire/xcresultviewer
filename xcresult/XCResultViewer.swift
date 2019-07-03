@@ -10,19 +10,39 @@ import Foundation
 
 struct XCResultViewer {
     
-    init(arguments: [String] = ProcessInfo.processInfo.arguments) throws {
-        if let resultArgument = ProcessInfo.processInfo.arguments[safeAt: 1] {
-            let url = URL(fileURLWithPath: resultArgument)
-            guard url.isXCResult else { fatalError("Provided path is not to an xcresult") }
-            url.testRuns().forEach { testRun in
-                let failurePageGenerator = FailurePageGenerator(testRun: testRun, xcresultURL: url)
-                failurePageGenerator.generate()
+    init(arguments: [String] = ProcessInfo.processInfo.arguments) {
+        guard let path = ProcessInfo.processInfo.arguments.last else { fatalError("Missing path to xcresult") }
+        let url = URL(fileURLWithPath: path)
+        guard url.isXCResult else { fatalError("Missing path to xcresult") }
+        let flags: [Flag] = arguments.compactMap { Flag(rawValue: $0) }
+        url.testRuns().forEach { testRun in
+            if flags.contains(.analyze) {
                 let analyzer = Analyzer(testRun: testRun)
                 analyzer.analyze()
+            } else {
+                let failurePageGenerator = FailurePageGenerator(testRun: testRun, xcresultURL: url)
+                failurePageGenerator.generate(shouldOpenBrowser: !flags.contains(.skipOpenPage))
             }
-        } else {
-            print("Missing path to xcresult")
         }
+    }
+    
+}
+
+private extension XCResultViewer {
+    
+    enum Flag {
+        
+        case analyze
+        case skipOpenPage
+        
+        init?(rawValue: String) {
+            switch rawValue {
+            case "-a", "--analyze": self = .analyze
+            case "-s", "--skip-open-page": self = .skipOpenPage
+            default: return nil
+            }
+        }
+        
     }
     
 }

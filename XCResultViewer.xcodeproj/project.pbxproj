@@ -92,7 +92,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C37D666921ADFAF900CC2BD9 /* Result */ = {
+		C37D666921ADFAF900CC2BD9 /* TestRun */ = {
 			isa = PBXGroup;
 			children = (
 				C359C7A221A2AFD00003408C /* TestRun.swift */,
@@ -106,7 +106,7 @@
 				C37D666721ADFAC500CC2BD9 /* Attachment.swift */,
 				C3079A7E22CC94C5008E41A7 /* Result+Helpers.swift */,
 			);
-			path = Result;
+			path = TestRun;
 			sourceTree = "<group>";
 		};
 		C37D666A21ADFB1100CC2BD9 /* Helpers */ = {
@@ -121,7 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				C327033222CD289200DB88D5 /* Helpers */,
-				C37D666921ADFAF900CC2BD9 /* Result */,
+				C37D666921ADFAF900CC2BD9 /* TestRun */,
 				C386B08721AB51B500814255 /* FailurePageGenerator.swift */,
 				C3079A7C22CC0AB6008E41A7 /* Analyzer.swift */,
 			);

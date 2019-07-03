@@ -17,7 +17,7 @@ struct FailurePageGenerator {
     // MARK: - Functions -
     // MARK: Internal
     
-    func generate() {
+    func generate(shouldOpenBrowser: Bool) {
         var html = initialHTML()
         testRun.testTargets.forEach { testTarget in
             handle(testTarget: testTarget, html: &html)
@@ -27,7 +27,9 @@ struct FailurePageGenerator {
         let htmlData = Data(html.utf8)
         do {
             try htmlData.write(to: fileURL)
-            NSWorkspace.shared.open(fileURL)
+            if shouldOpenBrowser {
+                NSWorkspace.shared.open(fileURL)                
+            }
         } catch {
             print("Unable to write html to url", fileURL, error.localizedDescription)
         }
