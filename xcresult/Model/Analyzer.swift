@@ -53,7 +53,7 @@ struct Analyzer {
             let testCount = shortest.tests.count
             print("Shortest test case was \(shortest.name) at \(Int(shortest.duration)) seconds and with \(testCount) test \(testCount == 1 ? "function" : "functions ")")
         } else {
-            print("Couldn't determine shorted test case")
+            print("Couldn't determine shortest test case")
         }
     }
     
