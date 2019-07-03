@@ -1,5 +1,5 @@
 //
-//  ResultHandler.swift
+//  FailurePageGenerator.swift
 //  XCResultViewer
 //
 //  Created by Kane Cheshire on 25/11/2018.
@@ -9,36 +9,17 @@
 import AppKit
 
 /// Handles turning an xcresult into html and displaying to the user
-struct ResultHandler {
+struct FailurePageGenerator {
+    
+    let testRun: TestRun
+    let xcresultURL: URL
     
     // MARK: - Functions -
     // MARK: Internal
     
-    /// Handles a URL, expecting the URL to be a path to an xcresult directory.
-    func handle(resultURL url: URL) {
-        guard url.pathExtension == "xcresult" else {
-            return print("Provided path is not to an xcresult")
-        }
-        guard let summariesEnumerator = FileManager.default.enumerator(atPath: url.path) else {
-            return print("Unable to create summaries enumerator")
-        }
-        summariesEnumerator.forEach { thing in
-            guard let path = thing as? String, path.contains("action_TestSummaries.plist") else { return }
-            let data = try? Data(contentsOf: url.appendingPathComponent(path))
-            guard let result = try? PropertyListDecoder().decode(Result.self, from: data ?? Data()) else {
-                return print("Unable to decode Result object from plist at path", path)
-            }
-            let analyzer = Analyzer(result: result)
-            analyzer.analyze()
-//            handle(res: result, xcresultURL: url)
-        }
-    }
-    
-    // MARK: - Private -
-    
-    private func handle(res: Result, xcresultURL: URL) {
+    func generate() {
         var html = initialHTML()
-        res.testTargets.forEach { testTarget in
+        testRun.testTargets.forEach { testTarget in
             handle(testTarget: testTarget, html: &html)
         }
         html += "</div></body></html>"
@@ -51,6 +32,8 @@ struct ResultHandler {
             print("Unable to write html to url", fileURL, error.localizedDescription)
         }
     }
+    
+    // MARK: - Private -
     
     private func initialHTML() -> String {
         return """

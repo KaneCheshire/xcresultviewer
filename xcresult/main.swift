@@ -8,9 +8,4 @@
 
 import Foundation
 
-if let resultArgument = ProcessInfo.processInfo.arguments[safeAt: 1] {
-    let url = URL(fileURLWithPath: resultArgument)
-    ResultHandler().handle(resultURL: url)
-} else {
-    print("Missing path to xcresult")
-}
+_ = try XCResultViewer()

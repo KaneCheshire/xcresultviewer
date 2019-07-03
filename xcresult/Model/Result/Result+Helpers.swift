@@ -6,20 +6,9 @@
 //  Copyright © 2019 kane.codes. All rights reserved.
 //
 
-// 1: Run a local instance of the mock
-// 2: Turn off animations
-// 3: Test analytics by interaction
-// 4: Use xcresultviewer to view failures
-// 5: Use BDD steps
-// 6: await for everything
-// 7: one test per case
-// 8: similar timed test functions
-// 9: run in parallel/override the default parallel count
-// 10: retry flaky tests
-
 import Foundation
 
-extension Result {
+extension TestRun {
     
     // Returns all test suites in the result as one flat array.
     func allTestSuites() -> [TestSuite] {

@@ -8,9 +8,10 @@
 
 import Foundation
 
+/// Analyzes a test run.
 struct Analyzer {
     
-    let result: Result
+    let testRun: TestRun
     
     /// Analyzes the result to help figure out how to optimize your tests for parallel testing.
     func analyze(_ start: Date = Date()) {
@@ -29,17 +30,17 @@ struct Analyzer {
     }
     
     private func analyzeTotalDuration() {
-        let totalDuration = result.totalDuration()
-        print("Total duration of \(Int(totalDuration)) seconds/\(Int(totalDuration / 60)) minutes from \(result.allTests().count) test functions in \(result.allTestCases().count) test cases")
+        let totalDuration = testRun.totalDuration()
+        print("Total duration of \(Int(totalDuration)) seconds/\(Int(totalDuration / 60)) minutes from \(testRun.allTests().count) test functions in \(testRun.allTestCases().count) test cases")
     }
     
     private func analyzeAverageDuration() {
-        let averageDuration = Int(result.averageTestDuration())
+        let averageDuration = Int(testRun.averageTestDuration())
         print("Average test function duration of \(averageDuration) seconds")
     }
     
     private func analyzeLongestTestCase() {
-        if let longest = result.longestTestCase() {
+        if let longest = testRun.longestTestCase() {
             let testCount = longest.tests.count
             print("Longest test case was \(longest.name) at \(Int(longest.duration)) seconds and with \(testCount) test \(testCount == 1 ? "function" : "functions")")
         } else {
@@ -48,7 +49,7 @@ struct Analyzer {
     }
     
     private func analyzeShortestTestCase() {
-        if let shortest = result.shortestTestCase() {
+        if let shortest = testRun.shortestTestCase() {
             let testCount = shortest.tests.count
             print("Shortest test case was \(shortest.name) at \(Int(shortest.duration)) seconds and with \(testCount) test \(testCount == 1 ? "function" : "functions ")")
         } else {
@@ -57,7 +58,7 @@ struct Analyzer {
     }
     
     private func analyzeLongestTestFunction() {
-        if let longest = result.longestTest() {
+        if let longest = testRun.longestTest() {
             print("Longest test function was \(longest.name) at \(Int(longest.duration)) seconds")
         } else {
             print("Couldn't determine longest test function")
@@ -65,7 +66,7 @@ struct Analyzer {
     }
     
     private func analyzeShortestTestFunction() {
-        if let shortest = result.shortestTest() {
+        if let shortest = testRun.shortestTest() {
             print("Shortest test function was \(shortest.name) at \(Int(shortest.duration)) seconds")
         } else {
             print("Couldn't determine shortest test function")
@@ -73,7 +74,7 @@ struct Analyzer {
     }
     
     private func analyzeTestCasesWithMoreThanOneTestFunction() {
-        let cases = result.testCasesWithMoreThanOneTest()
+        let cases = testRun.testCasesWithMoreThanOneTest()
         if cases.isEmpty {
             print("No test cases with more than one test function found, optimum for parallel UI testing 👌")
         } else {
