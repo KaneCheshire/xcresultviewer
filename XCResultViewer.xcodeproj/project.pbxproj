@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C3079A7D22CC0AB6008E41A7 /* Analyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3079A7C22CC0AB6008E41A7 /* Analyzer.swift */; };
+		C3079A7F22CC94C5008E41A7 /* Result+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3079A7E22CC94C5008E41A7 /* Result+Helpers.swift */; };
 		C37D665A21ADF98200CC2BD9 /* TestTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D665921ADF98200CC2BD9 /* TestTarget.swift */; };
 		C37D665C21ADF99700CC2BD9 /* TestSuite.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D665B21ADF99700CC2BD9 /* TestSuite.swift */; };
 		C37D665E21ADF9CF00CC2BD9 /* SubTestSuite.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37D665D21ADF9CF00CC2BD9 /* SubTestSuite.swift */; };
@@ -36,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		C3079A7C22CC0AB6008E41A7 /* Analyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analyzer.swift; sourceTree = "<group>"; };
+		C3079A7E22CC94C5008E41A7 /* Result+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Result+Helpers.swift"; sourceTree = "<group>"; };
 		C359C7A221A2AFD00003408C /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		C37D665921ADF98200CC2BD9 /* TestTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTarget.swift; sourceTree = "<group>"; };
 		C37D665B21ADF99700CC2BD9 /* TestSuite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSuite.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				C37D666321ADFA8E00CC2BD9 /* FailureSummary.swift */,
 				C37D666521ADFAA900CC2BD9 /* ActivitySummary.swift */,
 				C37D666721ADFAC500CC2BD9 /* Attachment.swift */,
+				C3079A7E22CC94C5008E41A7 /* Result+Helpers.swift */,
 			);
 			path = Result;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 				C3079A7D22CC0AB6008E41A7 /* Analyzer.swift in Sources */,
 				C386B08121AB4E0D00814255 /* main.swift in Sources */,
 				C37D666021ADF9FF00CC2BD9 /* Test.swift in Sources */,
+				C3079A7F22CC94C5008E41A7 /* Result+Helpers.swift in Sources */,
 				C386B08921AB526300814255 /* ResultHandler.swift in Sources */,
 				C37D665A21ADF98200CC2BD9 /* TestTarget.swift in Sources */,
 				C37D666221ADFA1E00CC2BD9 /* TestFunction.swift in Sources */,

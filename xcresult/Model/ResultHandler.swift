@@ -28,7 +28,8 @@ struct ResultHandler {
             guard let result = try? PropertyListDecoder().decode(Result.self, from: data ?? Data()) else {
                 return print("Unable to decode Result object from plist at path", path)
             }
-            Analyzer().analyze(result: result)
+            let analyzer = Analyzer(result: result)
+            analyzer.analyze()
 //            handle(res: result, xcresultURL: url)
         }
     }

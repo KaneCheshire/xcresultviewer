@@ -12,6 +12,7 @@ struct TestSuite {
     
     let name: String
     let subTestSuites: [SubTestSuite]
+    let duration: TimeInterval
     
 }
 
@@ -20,6 +21,7 @@ extension TestSuite: Codable {
     enum CodingKeys: String, CodingKey {
         case name = "TestName"
         case subTestSuites = "Subtests"
+        case duration = "Duration"
     }
     
 }
