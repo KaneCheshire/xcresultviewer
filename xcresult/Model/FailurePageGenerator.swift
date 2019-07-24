@@ -29,7 +29,9 @@ struct FailurePageGenerator {
             try htmlData.write(to: fileURL)
             if shouldOpenBrowser {
                 NSWorkspace.shared.open(fileURL)                
-            }
+			} else {
+				print("The failure log was written to: \(fileURL.absoluteString)")
+			}
         } catch {
             print("Unable to write html to url", fileURL, error.localizedDescription)
         }
