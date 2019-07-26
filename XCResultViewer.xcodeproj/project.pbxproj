@@ -52,7 +52,7 @@
 		C37D666521ADFAA900CC2BD9 /* ActivitySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitySummary.swift; sourceTree = "<group>"; };
 		C37D666721ADFAC500CC2BD9 /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		C385D4D221AB58A4008874E5 /* Array+Safe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Safe.swift"; sourceTree = "<group>"; };
-		C386B07E21AB4E0C00814255 /* xcresultviewer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = xcresultviewer; sourceTree = BUILT_PRODUCTS_DIR; };
+		C386B07E21AB4E0C00814255 /* xcrv */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = xcrv; sourceTree = BUILT_PRODUCTS_DIR; };
 		C386B08021AB4E0D00814255 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		C386B08721AB51B500814255 /* FailurePageGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailurePageGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,7 +87,7 @@
 		C359C79021A2AF9D0003408C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C386B07E21AB4E0C00814255 /* xcresultviewer */,
+				C386B07E21AB4E0C00814255 /* xcrv */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,7 +156,7 @@
 			);
 			name = xcresultviewer;
 			productName = xcresult;
-			productReference = C386B07E21AB4E0C00814255 /* xcresultviewer */;
+			productReference = C386B07E21AB4E0C00814255 /* xcrv */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -341,7 +341,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 9BCL7VAFF4;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = xcrv;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
@@ -353,7 +353,7 @@
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 9BCL7VAFF4;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = xcrv;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
